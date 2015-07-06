@@ -1,0 +1,40 @@
+* {
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+	font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+.container {
+	width: 960px;
+	padding: 25px;
+	margin: 0 auto;
+}
+
+.header {
+	background-color: #003680;
+	height: 75px;
+}
+
+.header .container {
+	padding: 0;
+}
+
+a {
+	color: #003680;
+}
+
+pre {
+	overflow-x: scroll;
+	width: 100%;
+}
+
+.canceled .highlighted {
+	font-style: italic;
+	font-weight: normal;
+	color: #757575;
+}
