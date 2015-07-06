@@ -1,8 +1,8 @@
 var cooptaz_conf = {
-  req_basic_auth_pass: '<0>',
-  mail_transporter_pass: '<1>',
-  base_url: '<2>',
-  mongodb_address: '<3>'
+  req_basic_auth_pass: 'pepiniere27',
+  mail_transporter_pass: 'frenicoju2010',
+  base_url: 'arcane-shelf-2702.herokuapp.com',
+  mongodb_address: 'localhost'
 }
 
 var env = process.env.NODE_ENV || 'development';
@@ -20,7 +20,7 @@ var basicAuth = require('basic-auth-connect');
 
 var nodemailer = require('nodemailer');
 var hbs = require('nodemailer-express-handlebars');
-var mongoose = require('mongoose');
+//var mongoose = require('mongoose');
 
 var app = express();
 app.locals.ENV = env;
@@ -79,6 +79,7 @@ df.i18n = {
 
 mailer.use('compile', hbs(options));
 
+/*
 mongoose.connect('mongodb://' + cooptaz_conf.mongodb_address + '/cooptaz');
 
 var RecommendationSchema = mongoose.Schema({
@@ -107,6 +108,7 @@ var RecommendationSchema = mongoose.Schema({
 });
 
 var Recommendation = mongoose.model('Recommendation', RecommendationSchema);
+*/
 
 app.get('/', function(req, res, next) {
   res.render('index', { title: 'Coopt\'Allianz v1.0.0' });
@@ -116,6 +118,7 @@ app.get('/recommendations/:object_id/cancel', function (req, res, next) {
 
   var exists = true;
 
+  /*
   Recommendation.findOne({ _id: req.params.object_id }, '_id status', function (e1, recommendation) {
     if (e1) {
       var e = new Error('Demande de contact introuvable');
@@ -146,6 +149,8 @@ app.get('/recommendations/:object_id/cancel', function (req, res, next) {
       res.render('cancel', { title: 'Annulation demande de contact', item: req.params.object_id });
     }
   });
+  */
+  res.render('cancel', { title: 'Annulation demande de contact', item: req.params.object_id });
 });
 
 app.post('/api/recommendations', auth, function (req, res) {
@@ -159,6 +164,7 @@ app.post('/api/recommendations', auth, function (req, res) {
   var now = new Date();
   now.setTimezone('Europe/Paris');
 
+  /*
   var r = new Recommendation();
 
   r.contributor_firstname = req.body.contributor_firstname;
@@ -183,12 +189,13 @@ app.post('/api/recommendations', auth, function (req, res) {
   r.canceled_date = null;
 
   r.status = 'pending';
+  */
 
-  r.save(function (err) {
+  /*r.save(function (err) {
     if (err) {
       res.json({ status: 'FAIL', error: { error_id: 1002, error_message: 'La recommandation n\'a pas pu être enregistré.' } });
       return;
-    }
+    }*/
 
     // MAIL A : system to contributor
     //
@@ -215,7 +222,10 @@ app.post('/api/recommendations', auth, function (req, res) {
     //
     var ctx_template_b = req.body;
     ctx_template_b.email_title_b = 'CONFIRMATION DEMANDE DE CONTACT';
-    ctx_template_b.link_b = 'http://' + cooptaz_conf.base_url + '/recommendations/' + r._id + '/cancel';
+    //ctx_template_b.link_b = 'https://' + cooptaz_conf.base_url + '/recommendations/' + r._id + '/cancel';
+
+    ctx_template_b.link_b = 'https://' + cooptaz_conf.base_url + '/recommendations/' + 'i9u854z9mp' + '/cancel';
+
     ctx_template_b.expert = req.body.contact_type_of_callback == 'distance' ? 'conseiller' : 'agent général';
 
     var mail_b_options = {
@@ -300,8 +310,6 @@ app.use(function(err, req, res, next) {
 
 //module.exports = app;
 
-console.log('start');
-
-app.listen(3030, function () {
+app.listen(80, function () {
   console.log('App running...');
 });
