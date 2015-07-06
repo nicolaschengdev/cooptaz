@@ -78,7 +78,7 @@ df.i18n = {
 
 mailer.use('compile', hbs(options));
 
-mongoose.connect('mongodb://localhost/cooptaz');
+mongoose.connect('mongodb://localhost:27017/cooptaz');
 
 var RecommendationSchema = mongoose.Schema({
   contributor_firstname: String,
