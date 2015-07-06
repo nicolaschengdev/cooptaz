@@ -6,19 +6,6 @@ var cooptaz_conf = {
 
 var env = process.env.NODE_ENV || 'development';
 
-/*
-var lineReader = require('line-reader');
-
-lineReader.eachLine('../pass', function(line, last) {
-  var pass_arg = line.split('=');
-  cooptaz_conf[pass_arg[0]] = pass_arg[1];
-  if (last) {
-    init_app();
-    return false;
-  }
-});
-*/
-
 var time = require('time')(Date);
 
 var express = require('express');
