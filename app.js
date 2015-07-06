@@ -7,7 +7,7 @@ var cooptaz_conf = {
 
 var env = process.env.NODE_ENV || 'development';
 
-var time = require('time')(Date);
+//var time = require('time')(Date);
 
 var express = require('express');
 var path = require('path');
@@ -127,7 +127,7 @@ app.get('/recommendations/:object_id/cancel', function (req, res, next) {
     if (recommendation.status != 'canceled') {
 
       var now = new Date();
-      now.setTimezone('Europe/Paris');
+      //now.setTimezone('Europe/Paris');
 
       recommendation.status = 'canceled';
       recommendation.canceled_date = now;
@@ -157,7 +157,7 @@ app.post('/api/recommendations', auth, function (req, res) {
   //console.log(req.body);
 
   var now = new Date();
-  now.setTimezone('Europe/Paris');
+  //now.setTimezone('Europe/Paris');
 
   var r = new Recommendation();
 
