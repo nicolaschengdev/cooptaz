@@ -1,7 +1,8 @@
 var cooptaz_conf = {
   req_basic_auth_pass: '<0>',
   mail_transporter_pass: '<1>',
-  base_url: '<2>'
+  base_url: '<2>',
+  mongodb_address: '<3>'
 }
 
 var env = process.env.NODE_ENV || 'development';
@@ -78,7 +79,7 @@ df.i18n = {
 
 mailer.use('compile', hbs(options));
 
-mongoose.connect('mongodb://localhost:27017/cooptaz');
+mongoose.connect('mongodb://' + cooptaz_conf.mongodb_address + '/cooptaz');
 
 var RecommendationSchema = mongoose.Schema({
   contributor_firstname: String,
@@ -297,4 +298,10 @@ app.use(function(err, req, res, next) {
 });
 
 
-module.exports = app;
+//module.exports = app;
+
+console.log('start');
+
+app.listen(3030, function () {
+  console.log('App running...');
+});

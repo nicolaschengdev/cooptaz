@@ -2,6 +2,9 @@
   "name": "frontend",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
   "dependencies": {
     "basic-auth-connect": "^1.0.0",
     "body-parser": "~1.13.1",
@@ -11,7 +14,7 @@
     "express": "~4.13.0",
     "jade": "~1.11.0",
     "line-reader": "^0.2.4",
-    "mongodb": "^1.4.12",
+    "mongodb": "^2.0.35",
     "mongoose": "^3.9.7",
     "morgan": "~1.6.1",
     "multer": "^0.1.8",
