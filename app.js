@@ -20,7 +20,7 @@ var basicAuth = require('basic-auth-connect');
 
 var nodemailer = require('nodemailer');
 var hbs = require('nodemailer-express-handlebars');
-//var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
 var app = express();
 app.locals.ENV = env;
