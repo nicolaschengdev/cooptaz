@@ -17,7 +17,6 @@
     "multer": "^0.1.8",
     "nodemailer": "^1.4.0",
     "nodemailer-express-handlebars": "^1.0.0",
-    "serve-favicon": "~2.3.0",
-    "time": "^0.11.3"
+    "serve-favicon": "~2.3.0"
   }
 }
