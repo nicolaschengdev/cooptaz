@@ -107,6 +107,10 @@ var RecommendationSchema = mongoose.Schema({
 
 var Recommendation = mongoose.model('Recommendation', RecommendationSchema);
 
+app.get('/', function(req, res, next) {
+  res.render('index', { title: 'Coopt\'Allianz v1.0.0' });
+});
+
 app.get('/recommendations/:object_id/cancel', function (req, res, next) {
 
   var exists = true;
@@ -137,6 +141,8 @@ app.get('/recommendations/:object_id/cancel', function (req, res, next) {
 
         res.render('cancel', { title: 'Annulation demande de contact', item: req.params.object_id });
       });
+    } else {
+      res.render('cancel', { title: 'Annulation demande de contact', item: req.params.object_id });
     }
   });
 });
