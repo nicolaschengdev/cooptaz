@@ -2,8 +2,10 @@ var cooptaz_conf = {
   req_basic_auth_pass: '<0>',
   mail_transporter_pass: '<1>',
   base_url: '<2>',
-  mongodb_address: '<3>'
-}
+  mongodb_address: '<3>',
+  parse_app_id: '<4>',
+  parse_rest_api_key: '<5>'
+};
 
 var env = process.env.NODE_ENV || 'development';
 
@@ -21,6 +23,8 @@ var basicAuth = require('basic-auth-connect');
 var nodemailer = require('nodemailer');
 var hbs = require('nodemailer-express-handlebars');
 var mongoose = require('mongoose');
+
+var rest = require('restler');
 
 var app = express();
 app.locals.ENV = env;
@@ -215,7 +219,7 @@ app.post('/api/recommendations', auth, function (req, res) {
     //
     var ctx_template_b = req.body;
     ctx_template_b.email_title_b = 'CONFIRMATION DEMANDE DE CONTACT';
-    ctx_template_b.link_b = 'https://' + cooptaz_conf.base_url + '/recommendations/' + r._id + '/cancel';
+    ctx_template_b.link_b = 'http://' + cooptaz_conf.base_url + '/recommendations/' + r._id + '/cancel';
 
     ctx_template_b.expert = req.body.contact_type_of_callback == 'distance' ? 'conseiller' : 'agent général';
 
@@ -263,9 +267,54 @@ app.post('/api/recommendations', auth, function (req, res) {
       }
     });
 
-    res.json({ status: 'OK', result: 1 });
+    res.json({ status: 'OK', result: 'w' + r._id + '' });
   });
-})
+});
+
+// w559b4db368972fdd23046f99
+app.get('/api/recommendations/push/:channel', function (req, res, next) {
+
+  var options = {
+    headers: {
+      'X-Parse-Application-Id': cooptaz_conf.parse_app_id,
+      'X-Parse-REST-API-Key': cooptaz_conf.parse_rest_api_key
+    }
+  };
+
+  var expert = 'Joséphine';
+  var message = expert + ': ' + 'On sait depuis longtemps que travailler avec du texte lisible et contenant du sens est source de distractions, et empêche de se concentrer sur la mise en page elle-même. L\'avantage du Lorem Ipsum sur un texte générique comme \'Du texte. Du texte. Du texte.\' est qu\'il possède une distribution de lettres plus ou moins normale, et en tout cas comparable avec celle du français standard. De nombreuses suites logicielles de mise en page ou éditeurs de sites Web ont fait du Lorem Ipsum leur faux texte par défaut, et une recherche pour \'Lorem Ipsum\' vous conduira vers de nombreux sites qui n\'en sont encore qu\'à leur phase de construction. Plusieurs versions sont apparues avec le temps, parfois par accident, souvent intentionnellement (histoire d\'y rajouter de petits clins d\'oeil, voire des phrases embarassantes).';
+  message = truncate(message, 140, '…');
+  message = message.replace(/'/g, "\'");
+  message = message.replace(/"/g, '\"');
+  message = message.replace(/\\/g, '\\');
+  message = message.replace(/\//g, '\/');
+
+  var json = {
+    'channels': [ req.params.channel ],
+    'data': {
+      'alert': message,
+      //'badge': 'Increment',
+      //'sound': 'cheering.caf',
+      'title': 'Coopt\'Allianz'
+    }
+  };
+
+  rest.postJson('https://api.parse.com/1/push', json, options).on('complete', function(data, response) {
+    console.log('PUSH SENT');
+  });
+
+  res.send('OK');
+});
+
+function truncate(str, maxLength, suffix) {
+  if (str.length > maxLength) {
+    str = str.substring(0, maxLength + 1); 
+    str = str.substring(0, Math.min(str.length, str.lastIndexOf(" ")));
+    str = str + suffix;
+  }
+  return str;
+}
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
