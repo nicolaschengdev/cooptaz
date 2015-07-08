@@ -1,0 +1,65 @@
+extends layout
+
+block head_style
+  // Latest compiled and minified CSS
+  //link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css')
+  //link(rel='stylesheet', href='/javascripts/bootstrap3-dialog/bootstrap-dialog.min.css')
+
+  // Optional theme
+  // link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css')
+
+block header_title
+  p #{title}
+  p.date #{formatted_attributed_at_date}
+
+block content
+  div.container
+    div.infos
+      div.left_panel
+        div.info_contact
+          h2 Infos contact à rappeler
+          p
+            | <label>Nom, Prénom:</label>
+            | <span>#{contact_lastname}</span>, </span>#{contact_firstname}</span> </span>(#{contact_civility})</span>
+          p
+            | <label>Téléphone:</label>
+            | <span>#{contact_phone}</span>
+          p
+            | <label>Email:</label>
+            | <span>#{contact_email}</span>
+          p
+            | <label>Ville:</label>
+            | <span>#{contact_city}</span>
+            | <span>(#{contact_zip})</span>
+          p
+            | <label>Besoin:</label>
+            | <span>#{contact_needs_description}</span>
+        
+        div.info_collab
+          h2 Infos Collaborateur Prescripteur
+          p
+            | <label>Nom:</label>
+            | <span>#{contributor_lastname}</span>
+          p
+            | <label>Prénom:</label>
+            | <span>#{contributor_firstname}</span>
+          p
+            | <label>Email:</label>
+            | <span>#{contributor_email}</span>
+          p
+            | <label>Unité:</label>
+            | <span>#{contributor_unit}</span>
+
+      div.center_panel
+        h2 Demande de contact traitée
+        | Cette demande de contact a été traitée #{formatted_performed_date}
+        
+block content_script
+  //script(src='//code.jquery.com/jquery-1.11.3.min.js')
+  //script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
+  
+  // Latest compiled and minified JavaScript
+  //script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')
+  //script(src='/javascripts/bootstrap3-dialog/bootstrap-dialog.min.js')
+  //script(src='/javascripts/recommendation.js')
+  

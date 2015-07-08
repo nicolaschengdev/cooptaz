@@ -1,0 +1,106 @@
+extends layout
+
+block head_style
+  // Latest compiled and minified CSS
+  link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css')
+  link(rel='stylesheet', href='/javascripts/bootstrap3-dialog/bootstrap-dialog.min.css')
+
+  // Optional theme
+  // link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css')
+
+block header_title
+  p #{title}
+  p.date #{formatted_attributed_at_date}
+
+
+block content
+  div.container
+    div.guide
+      img(src='/images/ico_guide.png', alt='')
+      p.
+        Un contact vous a été transmis par un collaborateur Allianz France dans le cadre du programme Coopt’Allianz. Nous vous recommandons de bien vouloir <u>rappeler ce contact dans les 24h</u> (jours ouvrés) dès réception et de bien vouloir laisser un mot de remerciement pour le collaborateur.
+    div.infos
+      div.left_panel
+        div.info_contact
+          h2 Infos contact à rappeler
+          p
+            | <label>Nom, Prénom:</label>
+            | <span>#{contact_lastname}</span>, </span>#{contact_firstname}</span> </span>(#{contact_civility})</span>
+          p
+            | <label>Téléphone:</label>
+            | <span>#{contact_phone}</span>
+          p
+            | <label>Email:</label>
+            | <span>#{contact_email}</span>
+          p
+            | <label>Ville:</label>
+            | <span>#{contact_city}</span>
+            | <span>(#{contact_zip})</span>
+          p
+            | <label>Besoin:</label>
+            | <span>#{contact_needs_description}</span>
+        
+        div.info_collab
+          h2 Infos Collaborateur Prescripteur
+          p
+            | <label>Nom:</label>
+            | <span>#{contributor_lastname}</span>
+          p
+            | <label>Prénom:</label>
+            | <span>#{contributor_firstname}</span>
+          p
+            | <label>Email:</label>
+            | <span>#{contributor_email}</span>
+          p
+            | <label>Unité:</label>
+            | <span>#{contributor_unit}</span>
+
+      div.center_panel
+        h2 Remerciements
+        form(action='/', method='POST')
+          input(type='hidden', name='_id', value='#{_id}')
+          div.firstname_lastname
+            div.textfield.firstname
+              input(type='text', name='firstname', placeholder='Votre prénom')
+          
+            div.textfield.lastname
+              input(type='text', name='lastname', placeholder='Votre nom de famille')
+          br
+          div.dropdown
+            //input(type='hidden', name='network_name', value='')
+            button.btn.btn-block.dropdown-toggle(type='button', id='dropdownMenu1', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true') <span class="value">Sélectionner votre réseau d'appartenance</span> <span class="caret"></span>
+            ul.dropdown-menu(aria-labelledby='dropdownMenu1')
+              li
+                a(href='#') Agent général (ou collaborateur d’agence)
+              li
+                a(href='#') Conseiller AEL
+              li
+                a(href='#') Conseiller Patrimonial
+              li
+                a(href='#') Conseiller Pros-TPE
+              li
+                a(href='#') Points Services
+              li
+                a(href='#') Assurance du Personnel
+          p
+            h4 Votre message
+            label Vous pouvez personnalisé l’email suivant à votre convenance
+            br
+            textarea(rows='8', name='message') #{message}
+          div.actions
+            div
+              label.check
+                input(type='checkbox')
+                |    J'ai contacté le contact
+            div.button
+              button.btn.btn-default(type='submit') Envoyer
+        
+block content_script
+  script(src='//code.jquery.com/jquery-1.11.3.min.js')
+  script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
+  
+  // Latest compiled and minified JavaScript
+  script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')
+  script(src='/javascripts/bootstrap3-dialog/bootstrap-dialog.min.js')
+  script(src='/javascripts/recommendation.js')
+  
