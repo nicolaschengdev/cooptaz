@@ -544,7 +544,7 @@ app.post('/api/recommendations', auth, function (req, res) {
     }
 
     var ctx_template_c = req.body;
-    ctx_template_c.email_title_c = 'À RAPPELER SOUS 24h - ' + req.body.contact_civility + ' ' + req.body.contact_lastname;
+    ctx_template_c.email_title_c = 'A RAPPELER SOUS 24h - ' + req.body.contact_civility + ' ' + req.body.contact_lastname;
     //ctx_template_c.email_title_c = subject;
     ctx_template_c.email_subtitle_c = 'Le ' + long_date;
 
