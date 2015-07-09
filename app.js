@@ -121,25 +121,11 @@ var RecommendationSchema = mongoose.Schema({
 
 var Recommendation = mongoose.model('Recommendation', RecommendationSchema);
 
+/*
 app.get('/', function(req, res, next) {
   res.render('index', { title: 'Coopt\'Allianz v1.0.0' });
 });
-
-app.get('/api/push_notification', function (req, res, next) {
-  push_notification('test', 'test', true, null);
-  res.send('OK');
-});
-
-
-
-
-
-
-
-
-
-
-
+*/
 
 app.get('/superviseur/:dispatcher/recommandations/:object_id', function (req, res, next) {
 
@@ -283,32 +269,10 @@ app.post('/api/recommendations/done', function (req, res, next) {
         return;
       }
 
-      var options = {
-        headers: {
-          'X-Parse-Application-Id': cooptaz_conf.parse_app_id,
-          'X-Parse-REST-API-Key': cooptaz_conf.parse_rest_api_key
-        }
-      };
-
       var expert = req.body.agent_firstname;
       var message = expert + ': ' + req.body.agent_message;
-      message = truncate(message, 160, '…');
-      message = message.replace(/'/g, "\'");
-      message = message.replace(/"/g, '\"');
-      message = message.replace(/\\/g, '\\');
-      message = message.replace(/\//g, '\/');
 
-      var json = {
-        'channels': [ 'w' + req.body.recommendation_id ],
-        'data': {
-          'alert': message,
-          'title': 'Coopt\'Allianz'
-        }
-      };
-
-      rest.postJson('https://api.parse.com/1/push', json, options).on('complete', function(data, response) {
-        console.log('PUSH NOTIFICATIONS', data);
-      });
+      push_notification( 'w' + req.body.recommendation_id, message, true, null);
 
       res.json({ status: 'OK' });
     });
@@ -353,9 +317,12 @@ app.post('/api/recommendations/attribute_at', function (req, res, next) {
 
       var dispatcher_email = 'admin@whyers.com'; // jeremy.zaghdoun@allianz.fr
       var dispatcher_name = 'TEST';
-      var subject = 'COOPT\'ALLIANZ - À RAPPELER SOUS 24h - ' + req.body.contact_civility + ' ' + req.body.contact_lastname + ' - ' + short_date;
+      var subject = 'COOPT\'ALLIANZ - À RAPPELER SOUS 24h - ' + recommendation.contact_civility + ' ' + recommendation.contact_lastname + ' - ' + short_date;
 
       var ctx_template_d = req.body;
+
+      ctx_template_d.contributor_firstname = recommendation.contributor_firstname;
+      ctx_template_d.contributor_lastname = recommendation.contributor_lastname;
       ctx_template_d.email_title_d = 'NOUVELLE DEMANDE DE CONTACT';
       ctx_template_d.email_subtitle_d = 'Le ' + long_date;
 
@@ -601,7 +568,7 @@ function push_notification(channel, message, increment, callback) {
     }
   };
 
-  message = truncate(message, 140, '…');
+  message = truncate(message, 160, '…');
   message = message.replace(/'/g, "\'");
   message = message.replace(/"/g, '\"');
   message = message.replace(/\\/g, '\\');
