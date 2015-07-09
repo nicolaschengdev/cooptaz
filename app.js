@@ -125,6 +125,17 @@ app.get('/', function(req, res, next) {
   res.render('index', { title: 'Coopt\'Allianz v1.0.0' });
 });
 
+app.get('/api/push_notification', function (req, res, next) {
+  push_notification('test', 'test', true, null);
+  res.send('OK');
+});
+
+
+
+
+
+
+
 
 
 
@@ -567,10 +578,22 @@ app.post('/api/recommendations', auth, function (req, res) {
 
 
 
-// TEST DES PUSHS (OK)    559d154f1bbb359e255e0f30
-//
-app.get('/api/recommendations/push/:channel', function (req, res, next) {
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function push_notification(channel, message, increment, callback) {
   var options = {
     headers: {
       'X-Parse-Application-Id': cooptaz_conf.parse_app_id,
@@ -578,11 +601,6 @@ app.get('/api/recommendations/push/:channel', function (req, res, next) {
     }
   };
 
-  console.log(req.params.channel);
-  console.log(options);
-
-  var expert = 'Joséphine';
-  var message = expert + ': ' + 'On sait depuis longtemps que travailler avec du texte lisible et contenant du sens est source de distractions, et empêche de se concentrer sur la mise en page elle-même. L\'avantage du Lorem Ipsum sur un texte générique comme \'Du texte. Du texte. Du texte.\' est qu\'il possède une distribution de lettres plus ou moins normale, et en tout cas comparable avec celle du français standard. De nombreuses suites logicielles de mise en page ou éditeurs de sites Web ont fait du Lorem Ipsum leur faux texte par défaut, et une recherche pour \'Lorem Ipsum\' vous conduira vers de nombreux sites qui n\'en sont encore qu\'à leur phase de construction. Plusieurs versions sont apparues avec le temps, parfois par accident, souvent intentionnellement (histoire d\'y rajouter de petits clins d\'oeil, voire des phrases embarassantes).';
   message = truncate(message, 140, '…');
   message = message.replace(/'/g, "\'");
   message = message.replace(/"/g, '\"');
@@ -590,23 +608,25 @@ app.get('/api/recommendations/push/:channel', function (req, res, next) {
   message = message.replace(/\//g, '\/');
 
   var json = {
-    'channels': [ req.params.channel ],
-    'data': {
-      'alert': message,
-      //'badge': 'Increment',
+    channels: [ channel ],
+    data: {
+      alert: message,
       //'sound': 'cheering.caf',
-      'title': 'CooptAllianz'
+      title: 'CooptAllianz',
+      message_id: '321p09t'
     }
   };
 
-  rest.postJson('https://api.parse.com/1/push', json, options).on('complete', function(data, response) {
-    console.log('PUSH SENT');
-    console.log(data);
-    console.log(response);
-  });
+  if (increment) {
+    json.data.badge = 'Increment';
+  }
 
-  res.send('OK');
-});
+  rest.postJson('https://api.parse.com/1/push', json, options).on('complete', function(data, response) {
+    if (callback) {
+      callback(data.result);
+    }
+  });
+}
 
 function truncate(str, maxLength, suffix) {
   if (str.length > maxLength) {
