@@ -92,6 +92,7 @@ var RecommendationSchema = mongoose.Schema({
   contributor_lastname: String,
   contributor_email: String,
   contributor_unit: String,
+  contributor_install_id: String,
 
   contact_civility: String,
   contact_firstname: String,
@@ -119,13 +120,23 @@ var RecommendationSchema = mongoose.Schema({
   status: String
 });
 
-var Recommendation = mongoose.model('Recommendation', RecommendationSchema);
+var MessageSchema = mongoose.Schema({
+  title: String,
+  created_datestring: String,
+  message: String,
+  install_id: String
+});
 
-/*
+
+
+var Recommendation = mongoose.model('Recommendation', RecommendationSchema);
+var Message = mongoose.model('Message', MessageSchema);
+
+
 app.get('/', function(req, res, next) {
   res.render('index', { title: 'Coopt\'Allianz v1.0.0' });
 });
-*/
+
 
 app.get('/superviseur/:dispatcher/recommandations/:object_id', function (req, res, next) {
 
@@ -233,6 +244,19 @@ app.get('/recommandations/:object_id/details', function (req, res, next) {
 
 });
 
+app.get('/api/u/:install_id/messages', auth, function(req, res, next) {
+
+  Message.find({ 'install_id': req.params.install_id }, function (err, messages) {
+    if (err) {
+      res.json({ status: 'FAIL' });
+      return;
+    }
+
+    res.json({ status: 'OK', result: messages });
+  });
+});
+
+
 app.post('/api/recommendations/done', function (req, res, next) {
 
   if (!req.body) {
@@ -271,6 +295,15 @@ app.post('/api/recommendations/done', function (req, res, next) {
 
       var expert = req.body.agent_firstname;
       var message = expert + ': ' + req.body.agent_message;
+
+      var msg = new Message();
+      msg.title = 'Remerciement de ' + recommendation.agent_firstname;
+      msg.created_datestring = df(now, 'dddd d mmmm yyyy à HH:MM');
+      msg.message = message;
+      msg.install_id = recommendation.contributor_install_id;
+
+      msg.save(function (err) {
+      });
 
       push_notification( 'w' + req.body.recommendation_id, message, true, null);
 
@@ -411,6 +444,7 @@ app.post('/api/recommendations', auth, function (req, res) {
   r.contributor_lastname = req.body.contributor_lastname;
   r.contributor_email = req.body.contributor_email;
   r.contributor_unit = req.body.contributor_unit;
+  r.contributor_install_id = req.body.contributor_install_id;
 
   r.contact_civility = req.body.contact_civility;
   r.contact_firstname = req.body.contact_firstname;
@@ -539,26 +573,6 @@ app.post('/api/recommendations', auth, function (req, res) {
     res.json({ status: 'OK', result: 'w' + r._id + '' });
   });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function push_notification(channel, message, increment, callback) {
   var options = {
