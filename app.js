@@ -8,7 +8,6 @@ var cooptaz_conf = {
 };
 
 //var env = process.env.NODE_ENV || 'development';
-
 var env = 'development';
 
 //var time = require('time')(Date);
@@ -127,15 +126,18 @@ var MessageSchema = mongoose.Schema({
   install_id: String
 });
 
-
-
 var Recommendation = mongoose.model('Recommendation', RecommendationSchema);
 var Message = mongoose.model('Message', MessageSchema);
+
+
 
 
 app.get('/', function(req, res, next) {
   res.render('index', { title: 'Coopt\'Allianz v1.0.0' });
 });
+
+
+
 
 
 app.get('/superviseur/:dispatcher/recommandations/:object_id', function (req, res, next) {
@@ -159,6 +161,7 @@ app.get('/superviseur/:dispatcher/recommandations/:object_id', function (req, re
     params['title'] = 'Demande de contact';
     
     if (recommendation.status == 'pending') {  
+      //
       // PENDING
       //
       if (recommendation.submitted_date) {
@@ -168,6 +171,7 @@ app.get('/superviseur/:dispatcher/recommandations/:object_id', function (req, re
       res.render('dispatch_pending', params);
 
     } else if (recommendation.status == 'attributed') {
+      //
       // ATTRIBUTED
       //
       if (recommendation.submitted_date) {
@@ -197,7 +201,8 @@ app.get('/recommandations/:object_id/details', function (req, res, next) {
     var params = recommendation;
     params['title'] = 'Demande de contact';
     
-    if (recommendation.status == 'pending' || recommendation.status == 'attributed') {  
+    if (recommendation.status == 'pending' || recommendation.status == 'attributed') {
+      //
       // PENDING ou ATTRIBUTED
       //
       if (recommendation.attributed_at_date) {
@@ -214,7 +219,8 @@ app.get('/recommandations/:object_id/details', function (req, res, next) {
       res.render('recommendation_attributed', params);
 
     } else if (recommendation.status == 'done') {
-      // PERFORMED
+      //
+      // DONE
       //
       if (recommendation.attributed_at_date) {
         params['formatted_attributed_at_date'] = 'Le ' + df(recommendation.attributed_at_date, 'dddd d mmmm yyyy à HH:MM');
@@ -227,6 +233,7 @@ app.get('/recommandations/:object_id/details', function (req, res, next) {
       res.render('recommendation_done', params);
 
     } else if (recommendation.status == 'canceled') { 
+      //
       // CANCELED
       //
       if (recommendation.attributed_at_date) {
@@ -348,8 +355,6 @@ app.post('/api/recommendations/attribute_at', function (req, res, next) {
       var long_date = df(now, 'dddd d mmmm yyyy à HH:MM');
       var short_date = df(now, 'dd/mm/yyyy');
 
-      var dispatcher_email = 'admin@whyers.com'; // jeremy.zaghdoun@allianz.fr
-      var dispatcher_name = 'TEST';
       var subject = 'COOPT\'ALLIANZ - À RAPPELER SOUS 24h - ' + recommendation.contact_civility + ' ' + recommendation.contact_lastname + ' - ' + short_date;
 
       var ctx_template_d = req.body;
@@ -365,7 +370,7 @@ app.post('/api/recommendations/attribute_at', function (req, res, next) {
 
       var mail_d_options = {
         from: from,
-        to: dispatcher_email,
+        to: recommendation.agent_email,
         //subject: 'COOPT’ALLIANZ - À RAPPELER SOUS 24h - ' + req.body.contact_lastname + ' - ' + short_date,
         subject: subject,
         template: 'template_d',
@@ -388,12 +393,7 @@ app.post('/api/recommendations/attribute_at', function (req, res, next) {
 
 
 
-
-
-
 app.get('/recommandations/:object_id/annulation', function (req, res, next) {
-
-  //var exists = true;
 
   Recommendation.findOne({ _id: req.params.object_id }, function (e1, recommendation) {
     if (e1) {
