@@ -183,6 +183,36 @@ app.get('/superviseur/:dispatcher/recommandations/:object_id', function (req, re
       }
 
       res.render('dispatch_attributed', params);
+    } else if (recommendation.status == 'done') {
+      //
+      // DONE
+      //
+      if (recommendation.submitted_date) {
+        params['formatted_submitted_date'] = 'Le ' + df(recommendation.submitted_date, 'dddd d mmmm yyyy à HH:MM');
+      }
+
+      if (recommendation.attributed_at_date) {
+        params['formatted_attributed_at_date'] = 'Le ' + df(recommendation.attributed_at_date, 'dddd d mmmm yyyy à HH:MM');
+      }
+
+      if (recommendation.performed_date) {
+        params['formatted_performed_date'] = 'Le ' + df(recommendation.performed_date, 'dddd d mmmm yyyy à HH:MM');
+      }
+
+      res.render('dispatch_done', params);
+    } else if (recommendation.status == 'canceled') {
+      //
+      // CANCELED
+      //
+      if (recommendation.submitted_date) {
+        params['formatted_submitted_date'] = 'Le ' + df(recommendation.submitted_date, 'dddd d mmmm yyyy à HH:MM');
+      }
+
+      if (recommendation.canceled_date) {
+        params['formatted_canceled_date'] = 'Le ' + df(recommendation.canceled_date, 'dddd d mmmm yyyy à HH:MM');
+      }
+
+      res.render('dispatch_canceled', params);
     }
   });
 });
