@@ -7,6 +7,7 @@ var cooptaz_conf = {
   parse_rest_api_key: '<5>'
 };
 
+
 //var env = process.env.NODE_ENV || 'development';
 var env = 'development';
 
@@ -195,8 +196,8 @@ app.get('/superviseur/:dispatcher/recommandations/:object_id', function (req, re
         params['formatted_attributed_at_date'] = 'Le ' + df(recommendation.attributed_at_date, 'dddd d mmmm yyyy à HH:MM');
       }
 
-      if (recommendation.performed_date) {
-        params['formatted_performed_date'] = 'Le ' + df(recommendation.performed_date, 'dddd d mmmm yyyy à HH:MM');
+      if (recommendation.done_date) {
+        params['formatted_done_date'] = 'Le ' + df(recommendation.done_date, 'dddd d mmmm yyyy à HH:MM');
       }
 
       res.render('dispatch_done', params);
@@ -256,8 +257,8 @@ app.get('/recommandations/:object_id/details', function (req, res, next) {
         params['formatted_attributed_at_date'] = 'Le ' + df(recommendation.attributed_at_date, 'dddd d mmmm yyyy à HH:MM');
       }
 
-      if (recommendation.performed_date) {
-        params['formatted_performed_date'] = 'le ' + df(recommendation.performed_date, 'dddd d mmmm yyyy à HH:MM');
+      if (recommendation.done_date) {
+        params['formatted_done_date'] = 'le ' + df(recommendation.done_date, 'dddd d mmmm yyyy à HH:MM');
       }
 
       res.render('recommendation_done', params);
@@ -316,7 +317,7 @@ app.post('/api/recommendations/done', function (req, res, next) {
     var now = new Date();
 
     recommendation.status = 'done';
-    recommendation.performed_date = now;
+    recommendation.done_date = now;
 
     recommendation.agent_firstname = req.body.agent_firstname;
     recommendation.agent_lastname = req.body.agent_lastname;
@@ -489,7 +490,7 @@ app.post('/api/recommendations', auth, function (req, res) {
 
   r.submitted_date = now;
   r.attributed_at_date = null;
-  r.performed_date = null;
+  r.done_date = null;
   r.canceled_date = null;
 
   r.status = 'pending';
