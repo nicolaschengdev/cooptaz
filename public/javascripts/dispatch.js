@@ -33,7 +33,7 @@
 
   			$.ajax({
 				type: 'POST',
-				url: '/api/recommendations/attribute_at',
+				url: '/api/v1.0/recommendations/attribute',
 				data: data,
 				dataType: 'json',
 				success: function(value, textStatus, jqXHR){

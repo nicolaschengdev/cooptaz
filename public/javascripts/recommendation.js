@@ -52,7 +52,7 @@
 
   			$.ajax({
 				type: 'POST',
-				url: '/api/recommendations/done',
+				url: '/api/v1.0/recommendations/complete',
 				data: data,
 				dataType: 'json',
 				success: function(value, textStatus, jqXHR){

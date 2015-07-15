@@ -37,8 +37,11 @@ block content
             | <span>#{contact_city}</span>
             | <span>(#{contact_zip})</span>
           p
+            | <label>Collaborateur:</label>
+            | <span>#{contact_is_colleague}</span>
+          p
             | <label>Besoin:</label>
-            | <span>#{contact_needs_description}</span>
+            | <span>#{needs_description}</span>
         
         div.info_collab
           h2 Infos Collaborateur Prescripteur
