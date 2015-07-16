@@ -48,7 +48,7 @@ router.get('/:object_id/details', function (req, res, next) {
 			//
 			// DONE
 			//
-			if (recommendation.attributed_at_date) {
+			if (recommendation.attributed_date) {
 				params['formatted_attributed_at_date'] = 'Le ' + df(recommendation.attributed_date, 'dddd d mmmm yyyy à HH:MM');
 			}
 
