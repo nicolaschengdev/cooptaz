@@ -316,7 +316,8 @@ module.exports = function (cooptaz_conf) {
 							dispatcher_name = 'AEL_2';
 							subject = 'COOPT\'ALLIANZ – A rappeler dans les 24h - ' + recommendation.contact_civility + ' ' + recommendation.contact_lastname + ' - ' + short_date;
 						} else {
-							dispatcher_email = 'cooptallianz@allianz.fr';
+							//dispatcher_email = 'cooptallianz@allianz.fr';
+							dispatcher_email = 'cooptaz@allianz.fr';
 							dispatcher_name = 'COOPTAZ';
 							subject = 'COOPT\'ALLIANZ – A rencontrer - ' + recommendation.contact_civility + ' ' + recommendation.contact_lastname + ' - ' + short_date;
 						}
