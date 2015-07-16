@@ -9,7 +9,8 @@ var cooptaz_conf = {
   inhouse_parse_rest_api_key: '<7>'
 };
 
-cooptaz_conf['env'] = 'development';
+//cooptaz_conf['env'] = 'development';
+cooptaz_conf['env'] = 'prod';
 
 var express = require('express');
 var path = require('path');

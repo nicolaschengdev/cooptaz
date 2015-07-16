@@ -258,7 +258,7 @@ module.exports = function (cooptaz_conf) {
 
 				var mail_a_options = {
 					from: FROM,
-					to: req.body.contributor_email,
+					to: recommendation.contributor_email,
 					subject: ctx_template_a.email_title_a,
 					template: 'template_a',
 					context: ctx_template_a
@@ -278,11 +278,11 @@ module.exports = function (cooptaz_conf) {
 				ctx_template_b.email_title_b = 'CONFIRMATION DEMANDE DE CONTACT';
 				ctx_template_b.link_b = 'http://' + cooptaz_conf.base_url + '/contact/recommandation/' + recommendation.short_id + '/annuler';
 
-				ctx_template_b.expert = req.body.contact_type_of_callback == 'distance' ? 'conseiller' : 'agent général';
+				ctx_template_b.expert = recommendation.type_of_callback == 'distance' ? 'conseiller' : 'agent général';
 
 				var mail_b_options = {
 					from: FROM,
-					to: req.body.contact_email,
+					to: recommendation.contact_email,
 					subject: ctx_template_b.email_title_b,
 					template: 'template_b',
 					context: ctx_template_b
@@ -303,28 +303,28 @@ module.exports = function (cooptaz_conf) {
 
 				var dispatcher_email = 'admin@whyers.com';
 				var dispatcher_name = 'TEST';
-				var subject = 'TEST - À RAPPELER SOUS 24h - ' + req.body.contact_civility + ' ' + req.body.contact_lastname + ' - ' + short_date;
+				var subject = 'TEST - À RAPPELER SOUS 24h - ' + recommendation.contact_civility + ' ' + recommendation.contact_lastname + ' - ' + short_date;
 
 				if (cooptaz_conf.env != 'development') {
-					if (req.body.contact_is_colleague == 'true') {
+					if (recommendation.contact_is_colleague == 'true') {
 						dispatcher_email = 'AEL@allianz.fr';
 						dispatcher_name = 'AEL_1';
-						subject = 'OS – COOPT\'ALLIANZ – A rappeler dans les 24h - ' + req.body.contact_civility + ' ' + req.body.contact_lastname + ' - ' + short_date;
+						subject = 'OS – COOPT\'ALLIANZ – A rappeler dans les 24h - ' + recommendation.contact_civility + ' ' + recommendation.contact_lastname + ' - ' + short_date;
 					} else {
-						if (req.body.type_of_callback == 'distance') {
+						if (recommendation.type_of_callback == 'distance') {
 							dispatcher_email = 'AEL@allianz.fr';
 							dispatcher_name = 'AEL_2';
-							subject = 'COOPT\'ALLIANZ – A rappeler dans les 24h - ' + req.body.contact_civility + ' ' + req.body.contact_lastname + ' - ' + short_date;
+							subject = 'COOPT\'ALLIANZ – A rappeler dans les 24h - ' + recommendation.contact_civility + ' ' + recommendation.contact_lastname + ' - ' + short_date;
 						} else {
 							dispatcher_email = 'cooptallianz@allianz.fr';
 							dispatcher_name = 'COOPTAZ';
-							subject = 'COOPT\'ALLIANZ – A rencontrer - ' + req.body.contact_civility + ' ' + req.body.contact_lastname + ' - ' + short_date;
+							subject = 'COOPT\'ALLIANZ – A rencontrer - ' + recommendation.contact_civility + ' ' + recommendation.contact_lastname + ' - ' + short_date;
 						}
 					}
 				}
 
 				var ctx_template_c = req.body;
-				ctx_template_c.email_title_c = 'A RAPPELER SOUS 24h - ' + req.body.contact_civility + ' ' + req.body.contact_lastname;
+				ctx_template_c.email_title_c = 'A RAPPELER SOUS 24h - ' + recommendation.contact_civility + ' ' + recommendation.contact_lastname;
 				ctx_template_c.email_subtitle_c = 'Le ' + long_date;
 
 				ctx_template_c.link_c = 'http://' + cooptaz_conf.base_url + '/dispatcher/' + dispatcher_name + '/recommandations/' + recommendation_id;
