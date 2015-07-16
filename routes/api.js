@@ -434,7 +434,7 @@ module.exports = function (cooptaz_conf) {
 
 			var now = new Date();
 
-			recommendation.status = 'complete';
+			recommendation.status = 'completed';
 			recommendation.completed_date = now;
 
 			recommendation.agent_firstname = req.body.agent_firstname;

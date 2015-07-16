@@ -44,7 +44,7 @@ router.get('/:object_id/details', function (req, res, next) {
 
 			res.render('recommendation_attributed', params);
 
-		} else if (recommendation.status == 'completed') {
+		} else if (recommendation.status == 'completed' || recommendation.status == 'complete' || recommendation.status == 'done') {
 			//
 			// DONE
 			//

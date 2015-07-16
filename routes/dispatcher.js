@@ -57,7 +57,7 @@ router.get('/:dispatcher_name/recommandations/:object_id', function (req, res, n
       }
 
       res.render('dispatch_attributed', params);
-    } else if (recommendation.status == 'completed') {
+    } else if (recommendation.status == 'completed' || recommendation.status == 'complete' || recommendation.status == 'done' ) {
       //
       // DONE
       //
